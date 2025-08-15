@@ -283,20 +283,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /**
-     * @description Syncs local quotes with the server, with server data taking precedence.
+     * @description Syncs local quotes with the server.
+     * This version simulates a push-then-pull strategy for conflict resolution.
      */
     const syncQuotes = async () => {
         displayStatus('Syncing with server...');
         try {
-            // Simulate fetching data from the server
+            // Step 1: Push local changes to the server
+            await saveToServer(quotes);
+
+            // Step 2: Fetch the latest data from the server
             const serverQuotes = await fetchQuotesFromServer();
 
-            // Simple conflict resolution: Server data always wins.
-            // This is a common strategy to maintain data integrity from a central source.
+            // Step 3: Compare and resolve conflicts (server data takes precedence)
             if (JSON.stringify(quotes) !== JSON.stringify(serverQuotes)) {
                 quotes = serverQuotes;
                 saveQuotes();
-                displayStatus('Data synced successfully. Server data was loaded.');
+                displayStatus('Data synced successfully. Local changes were saved and server data was loaded.');
                 populateCategories();
                 filterQuotes();
             } else {
@@ -321,4 +324,8 @@ document.addEventListener('DOMContentLoaded', () => {
     createAddQuoteForm();
     populateCategories(); // Populate filter dropdown.
     filterQuotes(); // Display initial quotes based on the loaded filter.
+
+    // Periodically sync with the server every 5 minutes (300000ms)
+    // You can adjust this interval as needed.
+    setInterval(syncQuotes, 300000);
 });
