@@ -70,8 +70,16 @@
         }
         .actions-container {
             display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 10px;
             margin-bottom: 20px;
+        }
+        #syncStatus {
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+            font-size: 0.9em;
         }
     </style>
   </head>
@@ -86,7 +94,9 @@
           Import Quotes
         </label>
         <input type="file" id="importFile" accept=".json" style="display: none;" />
+        <button id="syncBtn">Sync with Server</button>
     </div>
+    <div id="syncStatus"></div>
     <!-- Container where the form will be dynamically created -->
     <div id="formContainer"></div>
     <script src="script.js"></script>
