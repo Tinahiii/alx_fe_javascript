@@ -69,18 +69,26 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        .actions-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
     </style>
   </head>
   <body>
     <h1>Dynamic Quote Generator</h1>
     <div id="quoteDisplay"></div>
-    <button id="newQuote">Show New Quote</button>
-    <div class="form-container">
-      <h3>Add a New Quote</h3>
-      <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-      <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-      <button id="addQuoteBtn">Add Quote</button>
+    <div class="actions-container">
+        <button id="newQuote">Show New Quote</button>
+        <button id="exportQuotesBtn">Export Quotes</button>
+        <label for="importFile" class="custom-file-upload">
+          Import Quotes
+        </label>
+        <input type="file" id="importFile" accept=".json" style="display: none;" />
     </div>
+    <!-- Container where the form will be dynamically created -->
+    <div id="formContainer"></div>
     <script src="script.js"></script>
   </body>
   </html>
