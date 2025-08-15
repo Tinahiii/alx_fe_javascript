@@ -38,7 +38,7 @@
             font-size: 0.9em;
             color: #777;
         }
-        button {
+        button, select {
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
@@ -46,10 +46,9 @@
             color: white;
             font-size: 1em;
             cursor: pointer;
-            margin-bottom: 20px;
             transition: background-color 0.3s;
         }
-        button:hover {
+        button:hover, select:hover {
             background-color: #0056b3;
         }
         .form-container {
@@ -81,6 +80,7 @@
     <div id="quoteDisplay"></div>
     <div class="actions-container">
         <button id="newQuote">Show New Quote</button>
+        <select id="categoryFilter"></select>
         <button id="exportQuotesBtn">Export Quotes</button>
         <label for="importFile" class="custom-file-upload">
           Import Quotes
