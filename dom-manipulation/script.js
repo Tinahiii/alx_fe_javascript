@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formContainer = document.getElementById('formContainer');
     const exportQuotesBtn = document.getElementById('exportQuotesBtn');
     const importFile = document.getElementById('importFile');
+    const categoryFilter = document.getElementById('categoryFilter');
 
     /**
      * @description Saves the current quotes array to local storage.
@@ -144,9 +145,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Save the updated quotes array to local storage.
         saveQuotes();
+        
+        // Repopulate categories to include the new one.
+        populateCategories();
 
         // Show a new random quote to reflect the change.
-        showRandomQuote();
+        filterQuotes();
+    };
+
+    /**
+     * @description Populates the category filter dropdown with unique categories from the quotes array.
+     */
+    const populateCategories = () => {
+        // Clear existing options
+        categoryFilter.innerHTML = '';
+        
+        // Add "All Categories" option
+        const allOption = document.createElement('option');
+        allOption.value = 'all';
+        allOption.textContent = 'All Categories';
+        categoryFilter.appendChild(allOption);
+        
+        // Get unique categories
+        const categories = [...new Set(quotes.map(quote => quote.category))];
+
+        // Add each unique category as an option
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+        });
+
+        // Restore last selected filter from local storage
+        const lastFilter = localStorage.getItem('lastFilter');
+        if (lastFilter) {
+            categoryFilter.value = lastFilter;
+        }
+    };
+
+    /**
+     * @description Filters and displays quotes based on the selected category.
+     */
+    const filterQuotes = () => {
+        const selectedCategory = categoryFilter.value;
+        localStorage.setItem('lastFilter', selectedCategory); // Save the selected filter.
+
+        let filteredQuotes = quotes;
+        if (selectedCategory !== 'all') {
+            filteredQuotes = quotes.filter(quote => quote.category === selectedCategory);
+        }
+
+        if (filteredQuotes.length === 0) {
+            quoteDisplay.textContent = `No quotes found for category: ${selectedCategory}`;
+            return;
+        }
+
+        const randomQuote = filteredQuotes[Math.floor(Math.random() * filteredQuotes.length)];
+        
+        // Store the last viewed quote in session storage.
+        sessionStorage.setItem('lastQuote', JSON.stringify(randomQuote));
+
+        // Clear the current display.
+        quoteDisplay.innerHTML = '';
+
+        // Create and append the quote text element.
+        const quoteTextElement = document.createElement('p');
+        quoteTextElement.textContent = `"${randomQuote.text}"`;
+
+        // Create and append the quote category element.
+        const quoteCategoryElement = document.createElement('small');
+        quoteCategoryElement.textContent = `Category: ${randomQuote.category}`;
+
+        // Append both elements to the display container.
+        quoteDisplay.appendChild(quoteTextElement);
+        quoteDisplay.appendChild(quoteCategoryElement);
     };
 
     /**
@@ -178,7 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (Array.isArray(importedQuotes)) {
                     quotes.push(...importedQuotes);
                     saveQuotes();
-                    showRandomQuote();
+                    populateCategories(); // Update categories after import.
+                    filterQuotes();
                     alert('Quotes imported successfully!');
                 } else {
                     alert('Invalid JSON format. Please upload a file with an array of quotes.');
@@ -191,12 +265,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Attach event listeners to the buttons.
-    newQuoteBtn.addEventListener('click', showRandomQuote);
+    newQuoteBtn.addEventListener('click', filterQuotes);
     exportQuotesBtn.addEventListener('click', exportQuotesToJson);
     importFile.addEventListener('change', importFromJsonFile);
+    categoryFilter.addEventListener('change', filterQuotes);
 
     // Initial calls
     loadQuotes(); // Load quotes from local storage first.
     createAddQuoteForm();
-    showRandomQuote();
+    populateCategories(); // Populate filter dropdown.
+    filterQuotes(); // Display initial quotes based on the loaded filter.
 });
