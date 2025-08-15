@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * @description Simulates fetching quotes from a server with a delay.
      * @returns {Promise<Array>} A promise that resolves with the server quotes.
      */
-    const fetchFromServer = () => {
+    const fetchQuotesFromServer = () => {
         return new Promise(resolve => {
             setTimeout(() => {
                 // Get the latest server data from local storage, or use the default.
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayStatus('Syncing with server...');
         try {
             // Simulate fetching data from the server
-            const serverQuotes = await fetchFromServer();
+            const serverQuotes = await fetchQuotesFromServer();
 
             // Simple conflict resolution: Server data always wins.
             // This is a common strategy to maintain data integrity from a central source.
