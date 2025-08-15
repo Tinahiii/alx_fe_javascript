@@ -8,97 +8,182 @@
         body {
             font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            align-items: center;
+            height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
-        }
-        #quoteDisplay {
-            width: 80%;
-            max-width: 600px;
-            min-height: 100px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        #quoteDisplay p {
-            font-size: 1.5em;
-            margin: 0;
-            font-style: italic;
             color: #333;
+            flex-direction: column;
         }
-        #quoteDisplay small {
-            display: block;
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: #777;
-        }
-        button, select {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        button:hover, select:hover {
-            background-color: #0056b3;
-        }
-        .form-container {
-            margin-top: 20px;
-            width: 80%;
+
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 90%;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 1em;
         }
-        .form-container input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+
+        #quoteDisplay {
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            font-style: italic;
+            margin-bottom: 1em;
+            padding: 1em;
+            background-color: #e9ecef;
+            border-radius: 8px;
         }
-        .actions-container {
+
+        #quoteDisplay p {
+            margin: 0;
+            padding: 0;
+        }
+
+        #quoteDisplay small {
+            margin-top: 0.5em;
+            font-size: 0.7em;
+            color: #6c757d;
+        }
+
+        button {
+            padding: 0.8em 1.5em;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #newQuote {
+            background-color: #007bff;
+            color: white;
+        }
+
+        #newQuote:hover {
+            background-color: #0056b3;
+        }
+
+        .controls {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 0.5em;
         }
+        
+        #categoryFilter {
+            padding: 0.8em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-input-wrapper button {
+            background-color: #28a745;
+            color: white;
+            padding: 0.8em 1.5em;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .file-input-wrapper button:hover {
+            background-color: #218838;
+        }
+
+        #exportQuotesBtn {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        #exportQuotesBtn:hover {
+            background-color: #e0a800;
+        }
+
+        #addQuoteBtn {
+            background-color: #17a2b8;
+            color: white;
+            width: 100%;
+        }
+
+        #addQuoteBtn:hover {
+            background-color: #138496;
+        }
+
+        .form-container {
+            border: 1px solid #ccc;
+            padding: 1em;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+        }
+
+        input[type="text"] {
+            padding: 0.8em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: calc(100% - 1.6em);
+        }
+
         #syncStatus {
-            margin-top: 10px;
+            margin-top: 1em;
             font-style: italic;
-            color: #555;
-            font-size: 0.9em;
+            color: #007bff;
+        }
+        
+        #syncBtn {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        #syncBtn:hover {
+            background-color: #5a6268;
         }
     </style>
-  </head>
-  <body>
-    <h1>Dynamic Quote Generator</h1>
-    <div id="quoteDisplay"></div>
-    <div class="actions-container">
-        <button id="newQuote">Show New Quote</button>
-        <select id="categoryFilter"></select>
-        <button id="exportQuotesBtn">Export Quotes</button>
-        <label for="importFile" class="custom-file-upload">
-          Import Quotes
-        </label>
-        <input type="file" id="importFile" accept=".json" style="display: none;" />
-        <button id="syncBtn">Sync with Server</button>
+</head>
+<body>
+    <div class="container">
+        <h1>Dynamic Quote Generator</h1>
+        <div id="quoteDisplay"></div>
+        <button id="newQuote">New Quote</button>
+        <div class="controls">
+            <select id="categoryFilter"></select>
+            <div class="file-input-wrapper">
+                <input type="file" id="importFile" accept=".json" />
+                <button>Import Quotes</button>
+            </div>
+            <button id="exportQuotesBtn">Export Quotes</button>
+            <button id="syncBtn">Sync Quotes</button>
+        </div>
+        <div id="formContainer"></div>
+        <p id="syncStatus"></p>
     </div>
-    <div id="syncStatus"></div>
-    <!-- Container where the form will be dynamically created -->
-    <div id="formContainer"></div>
     <script src="script.js"></script>
-  </body>
-  </html>
+</body>
+</html>
