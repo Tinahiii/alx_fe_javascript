@@ -406,7 +406,7 @@ async function syncQuotes() {
     .then((res) => res.json())
     .then((data) => {
       console.log("Synced with server:", data);
-      showStatus("Quotes synced with server successfully!");
+      showStatus("Quotes synced with server!");
     })
     .catch((err) => {
       console.error("Error syncing with server:", err);
