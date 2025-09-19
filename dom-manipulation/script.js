@@ -296,3 +296,78 @@ function init() {
 
 // Run init after DOM loads
 document.addEventListener('DOMContentLoaded', init);
+//filtering 
+
+
+function populateCategories() {
+  const categoryFilter = document.getElementById("categoryFilter");
+
+  // Clear existing (avoid duplicates when re-populating)
+  categoryFilter.innerHTML = `<option value="all">All Categories</option>`;
+
+  // Get unique categories
+  const categories = [...new Set(quotes.map(q => q.category))];
+
+  categories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category;
+    option.textContent = category;
+    categoryFilter.appendChild(option);
+  });
+
+  // Restore last selected filter from localStorage
+  const savedFilter = localStorage.getItem("selectedCategory");
+  if (savedFilter) {
+    categoryFilter.value = savedFilter;
+    filterQuotes();
+  }
+}
+//  
+function filterQuotes() {
+  const selectedCategory = document.getElementById("categoryFilter").value;
+
+  // Save choice to localStorage
+  localStorage.setItem("selectedCategory", selectedCategory);
+
+  const quoteDisplay = document.getElementById("quoteDisplay");
+  quoteDisplay.innerHTML = "";
+
+  let filteredQuotes = quotes;
+
+  if (selectedCategory !== "all") {
+    filteredQuotes = quotes.filter(q => q.category === selectedCategory);
+  }
+
+  // Display random quote from filtered list
+  if (filteredQuotes.length > 0) {
+    const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+    quoteDisplay.textContent = filteredQuotes[randomIndex].text;
+  } else {
+    quoteDisplay.textContent = "No quotes available in this category.";
+  }
+}
+//update catagory when adding the code 
+function addQuote() {
+  const text = document.getElementById("newQuoteText").value;
+  const category = document.getElementById("newQuoteCategory").value;
+
+  if (text && category) {
+    quotes.push({ text, category });
+    saveQuotes(); // already stores in localStorage
+
+    // Update category list dynamically
+    populateCategories();
+
+    alert("Quote added successfully!");
+    document.getElementById("newQuoteText").value = "";
+    document.getElementById("newQuoteCategory").value = "";
+  } else {
+    alert("Please enter both quote text and category.");
+  }
+}
+//hook everything together 
+window.onload = function() {
+  loadQuotes();
+  populateCategories();
+  filterQuotes();
+};
