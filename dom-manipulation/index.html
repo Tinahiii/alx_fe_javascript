@@ -1,30 +1,46 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Quote Generator</title>
-     <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    #quoteDisplay { margin: 20px 0; font-size: 1.2em; font-style: italic; max-width: 50%;  }
-    .category { color: gray; font-size: 0.9em; }
-    input, button { margin: 5px; padding: 8px; }
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dynamic Quote Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width:700px; }
+    #quoteDisplay { margin: 20px 0; font-size:1.2rem; font-style:italic; }
+    .category { color: gray; display:block; margin-top:8px; font-size:0.9rem; }
+    input, button { margin:6px 4px; padding:8px 10px; }
+    #status { margin-top:12px; font-size:0.9rem; color:#333; }
+    .small { font-size:0.85rem; color:#666; }
   </style>
 </head>
 <body>
   <h1>Dynamic Quote Generator</h1>
 
-  <!-- Quote Display Section -->
+  <!-- Quote display -->
   <div id="quoteDisplay">Click "Show New Quote" to see one!</div>
   <button id="newQuote">Show New Quote</button>
+  <span class="small" id="lastViewedInfo"></span>
 
-  <!-- Add Quote Form -->
+  <hr/>
+
+  <!-- Add new quote -->
   <h2>Add a New Quote</h2>
   <div>
     <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
     <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
     <button id="addQuoteBtn">Add Quote</button>
   </div>
+
+  <hr/>
+
+  <!-- Import / Export -->
+  <h2>Import / Export Quotes (JSON)</h2>
+  <div>
+    <button id="exportBtn">Export Quotes (download JSON)</button>
+    <input type="file" id="importFile" accept=".json" />
+    <button id="clearStorageBtn">Clear Stored Quotes</button>
+  </div>
+  <div id="status" aria-live="polite"></div>
 
   <!-- Script -->
   <script src="script.js"></script>
