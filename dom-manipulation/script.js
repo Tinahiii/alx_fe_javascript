@@ -394,7 +394,7 @@ async function fetchQuotesFromServer() {
   }
 }
 //implment data sync 
-async function syncWithServer() {
+async function syncQuotes() {
   const serverQuotes = await fetchQuotesFromServer();
   fetch("https://jsonplaceholder.typicode.com/posts", {
     method: "POST",
@@ -437,7 +437,7 @@ function mergeQuotes(serverQuotes, localQuotes) {
   return allQuotes;
 }
 //period sync after 30 s 
-setInterval(syncWithServer, 30000);
+setInterval(syncQuotes, 30000);
 //Handle Cnflict
 function notifyUser(message) {
   const notification = document.createElement("div");
