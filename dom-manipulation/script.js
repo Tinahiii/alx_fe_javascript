@@ -371,3 +371,65 @@ window.onload = function() {
   populateCategories();
   filterQuotes();
 };
+//simulates server interaction 
+const SERVER_URL = "https://jsonplaceholder.typicode.com/posts"; 
+// We'll treat posts as quotes for simulation
+//fecth the quote from server 
+async function fetchQuotesFromServer() {
+  try {
+    const response = await fetch(SERVER_URL);
+    const data = await response.json();
+
+    // Simulate that server sends back objects like {text, category}
+    // JSONPlaceholder returns posts, so we map them
+    const serverQuotes = data.slice(0, 5).map(post => ({
+      text: post.title,
+      category: "Server"
+    }));
+
+    return serverQuotes;
+  } catch (error) {
+    console.error("Error fetching from server:", error);
+    return [];
+  }
+}
+//implment data sync 
+async function syncWithServer() {
+  const serverQuotes = await fetchQuotesFromServer();
+
+  // Conflict resolution: server data overrides local
+  quotes = mergeQuotes(serverQuotes, quotes);
+
+  saveQuotes();   // update local storage
+  populateCategories();
+  filterQuotes();
+
+  notifyUser("Quotes synced with server. Server data took precedence.");
+}
+//merge  quotes avoiding duplicates 
+function mergeQuotes(serverQuotes, localQuotes) {
+  const allQuotes = [...serverQuotes];
+
+  localQuotes.forEach(lq => {
+    if (!allQuotes.some(sq => sq.text === lq.text)) {
+      allQuotes.push(lq);
+    }
+  });
+
+  return allQuotes;
+}
+//period sync after 30 s 
+setInterval(syncWithServer, 30000);
+//Handle Cnflict
+function notifyUser(message) {
+  const notification = document.createElement("div");
+  notification.textContent = message;
+  notification.style.background = "yellow";
+  notification.style.padding = "5px";
+  notification.style.marginTop = "10px";
+  
+  document.body.prepend(notification);
+
+  setTimeout(() => notification.remove(), 4000);
+}
+
