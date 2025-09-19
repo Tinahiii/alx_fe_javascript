@@ -250,7 +250,7 @@ function clearStoredQuotes() {
   updateLastViewedInfo(null);
 }
 
-// ------------- Helpers: UI updates -------------
+// ------------- Helpers:UI updates -------------
 function updateStoredCount() {
   // optional: show how many quotes are stored
   const raw = localStorage.getItem(STORAGE_KEY);
@@ -396,6 +396,24 @@ async function fetchQuotesFromServer() {
 //implment data sync 
 async function syncWithServer() {
   const serverQuotes = await fetchQuotesFromServer();
+  fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ quotes }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Synced with server:", data);
+      showStatus("Quotes synced with server successfully!");
+    })
+    .catch((err) => {
+      console.error("Error syncing with server:", err);
+      showStatus("Error syncing with server", true);
+    });
+}
+
 
   // Conflict resolution: server data overrides local
   quotes = mergeQuotes(serverQuotes, quotes);
@@ -405,7 +423,7 @@ async function syncWithServer() {
   filterQuotes();
 
   notifyUser("Quotes synced with server. Server data took precedence.");
-}
+
 //merge  quotes avoiding duplicates 
 function mergeQuotes(serverQuotes, localQuotes) {
   const allQuotes = [...serverQuotes];
